@@ -37,8 +37,6 @@ const chechAnswer = function () {
 // Event Listener on button.check
 const checkButton = document.querySelector('button.check');
 checkButton.addEventListener('click', chechAnswer);
-
-console.log(getRandomNumber); // DELETE
 // Play again
 const playAgain = document.querySelector('button.again');
 
@@ -47,7 +45,6 @@ const replay = function () {
   getRandomNumber = generateRandomNumber();
   winn.classList.remove('winner', 'defeat');
   scorePoints.innerHTML = 20;
-  console.log(getRandomNumber); // DELETE
 };
 
 playAgain.addEventListener('click', replay);
