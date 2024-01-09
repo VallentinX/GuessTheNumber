@@ -45,6 +45,7 @@ const replay = function () {
   getRandomNumber = generateRandomNumber();
   winn.classList.remove('winner', 'defeat');
   scorePoints.innerHTML = 20;
+  message.innerHTML= 'Start guessing...';
 };
 
 playAgain.addEventListener('click', replay);
