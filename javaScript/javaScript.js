@@ -2,17 +2,17 @@
 // Create a random number
 const generateRandomNumber = () => Math.floor(Math.random() * 30) + 1;
 let getRandomNumber = generateRandomNumber();
+
 // Score and Highscore
 let score = 10;
 let highScore = 0;
+
 // Flothing variables
-const message = document.querySelector('p.message');
-const secretNumber = document.querySelector('div.number');
 const scorePoints = document.querySelector('p span.score');
 const userGuess = document.querySelector('input.guess');
 const background = document.querySelector('body');
-const highscorePoints = document.querySelector('p span.highscore');
-// Event Handler
+
+// Refactor code
 const winnerLoseGame = function () {
   if (+userGuess.value === getRandomNumber) {
     background.classList.add('winner');
@@ -20,54 +20,64 @@ const winnerLoseGame = function () {
     background.classList.add('defeat');
   }
 };
-const loseGame = function () {
-  message.textContent = '💥 You lost the game!';
-  score--;
-  winnerLoseGame();
-  check.removeEventListener('click', checkAnser);
-  secretNumber.textContent = getRandomNumber;
-  secretNumber.style.color = '#cf0000';
+
+const secretNumber = function (text, style) {
+  const number = document.querySelector('div.number');
+
+  number.textContent = text;
+  number.style.color = style;
 };
+
+const generateMessage = function (message) {
+  document.querySelector('p.message').textContent = message;
+};
+
+const removeEvL = function () {
+  check.removeEventListener('click', checkAnser);
+};
+
+// Event Handler
 const checkAnser = function () {
   if (!+userGuess.value) {
-    message.textContent = '⛔ Not a number!';
+    generateMessage('⛔ Not a number!');
   } else if (+userGuess.value === getRandomNumber) {
     if (score > highScore) {
       highScore = score;
-      highscorePoints.textContent = highScore;
+      document.querySelector('p span.highscore').textContent = highScore;
     }
-    message.textContent = '🎉 CORRECT! 🎉';
-    secretNumber.textContent = getRandomNumber;
+    removeEvL();
     winnerLoseGame();
-    check.removeEventListener('click', checkAnser);
-  } else if (+userGuess.value > getRandomNumber) {
+    generateMessage('🎉 CORRECT! 🎉');
+    secretNumber(getRandomNumber);
+  } else if (+userGuess.value !== getRandomNumber) {
     if (score > 1) {
-      message.textContent = '📈 Too high!';
       score--;
+      generateMessage(
+        +userGuess.value > getRandomNumber ? '📈 Too high!' : '📉 Too low!'
+      );
     } else {
-      loseGame();
-    }
-  } else if (+userGuess.value < getRandomNumber) {
-    if (score > 1) {
-      message.textContent = '📉 Too low!';
       score--;
-    } else {
-      loseGame();
+      removeEvL();
+      winnerLoseGame();
+      generateMessage('💥 You lost the game!');
+      secretNumber(getRandomNumber, '#cf0000');
     }
   }
+
   scorePoints.textContent = score;
 };
+
 const playAgain = function () {
   score = 10;
   scorePoints.textContent = score;
-  background.classList.remove('winner', 'defeat');
-  message.textContent = 'Start guessing...';
-  getRandomNumber = generateRandomNumber();
-  check.addEventListener('click', checkAnser);
-  secretNumber.textContent = '?';
-  secretNumber.style.color = '#222';
   userGuess.value = 0;
+  getRandomNumber = generateRandomNumber();
+  background.classList.remove('winner', 'defeat');
+  check.addEventListener('click', checkAnser);
+  secretNumber('?', '#222');
+  generateMessage('Start guessing...');
 };
+
 // Event Listener
 const check = document.querySelector('button.check');
 check.addEventListener('click', checkAnser);
